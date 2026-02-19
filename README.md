@@ -1,153 +1,233 @@
-# Space Tourism Website - React Application
+# 🚀 Space Tourism Website
 
-A modern, responsive Space Tourism website built with React, Vite, and React Router.
+A premium, fully-animated Space Tourism web application built with React, Vite, Framer Motion, and a pixel-perfect design system.
 
-## 🚀 Project Structure
+## ✨ Features
+
+### 🎬 High-End Animations
+- **Preloader** - Sci-fi loading sequence with percentage counter and progress bar (2.5s)
+- **Page Transitions** - Smooth fade & slide animations between routes using Framer Motion
+- **Sidebar** - Buttery-smooth slide-in navigation with backdrop blur and spring physics
+- **Component Animations** - Staggered text reveals, image step-ins, and carousel auto-play
+
+### 🎨 Design System
+- **CSS Variables** - Centralized design tokens for colors, fonts, and spacing
+- **Typography** - Three-font system (Bellefair serif, Barlow Condensed, Barlow)
+- **Color Palette** - Deep space dark (#0B0D17), light blue accent (#D0D6F9), pure white
+- **Responsive** - Mobile-first design with tablet and desktop breakpoints
+
+### 🧭 Navigation
+- **Desktop Navbar** - Horizontal navigation with active state indicators and hover effects
+- **Mobile Sidebar** - Slide-in menu with backdrop, click-outside-to-close, and Escape key support
+- **Dynamic Titles** - Browser tab titles update per route (e.g., "Space Tourism | Crew")
+
+### 📄 Pages
+
+#### Home (`/`)
+- Hero section with "Explore" CTA
+- Two-column grid layout (desktop) / stacked (mobile)
+- Animated explore button with hover ring effect
+
+#### Destination (`/destination`)
+- 4 Planets: Moon, Mars, Europa, Titan
+- Tab navigation with smooth content transitions
+- Displays: planet image (spinning animation), description, distance, travel time
+- **Layout:** Image left, content right (desktop) | Stacked (mobile)
+
+#### Crew (`/crew`)
+- 4 Crew Members with roles, names, bios, and images
+- Dot navigation with auto-play carousel (6s interval, pause on hover)
+- Staggered text animations (role → name → bio)
+- Image "step-in" animation from bottom
+- **Layout:** Text left, image right at bottom (desktop) | Image top → dots → text (mobile)
+
+#### Technology (`/technology`)
+- 3 Technologies: Launch Vehicle, Spaceport, Space Capsule
+- Numbered circle navigation (1, 2, 3)
+- Responsive images (portrait for desktop, landscape for mobile/tablet)
+- **Layout:** Numbers | Text | Image flush-right (desktop) | Image → Numbers → Text (mobile)
+
+## 🏗️ Project Structure
 
 ```
 React-js/
 ├── src/
-│   ├── components/          # Reusable UI components
-│   │   ├── Navbar.jsx       # Navigation component with mobile menu
-│   │   └── Navbar.css
-│   ├── layouts/             # Layout components
-│   │   ├── Layout.jsx       # Main layout wrapper with Navbar
+│   ├── components/
+│   │   ├── Preloader.jsx           # Sci-fi loading screen
+│   │   ├── Preloader.css
+│   │   ├── Navigation/
+│   │   │   ├── Navbar.jsx          # Desktop navigation
+│   │   │   ├── Navbar.css
+│   │   │   ├── Sidebar.jsx         # Mobile slide-in menu
+│   │   │   └── Sidebar.css
+│   │   ├── Destination/
+│   │   │   ├── DestinationNav.jsx  # Planet tabs
+│   │   │   └── DestinationNav.css
+│   │   ├── Crew/
+│   │   │   ├── CrewDots.jsx        # Dot pagination
+│   │   │   └── CrewDots.css
+│   │   └── Technology/
+│   │       ├── TechNumbers.jsx     # Numbered navigation
+│   │       └── TechNumbers.css
+│   ├── pages/
+│   │   ├── Home/
+│   │   │   ├── Home.jsx
+│   │   │   └── Home.css
+│   │   ├── Destination/
+│   │   │   ├── Destination.jsx
+│   │   │   └── Destination.css
+│   │   ├── Crew/
+│   │   │   ├── Crew.jsx
+│   │   │   └── Crew.css
+│   │   └── Technology/
+│   │       ├── Technology.jsx
+│   │       └── Technology.css
+│   ├── layouts/
+│   │   ├── Layout.jsx              # Main layout with page transitions
 │   │   └── Layout.css
-│   ├── pages/               # Page components
-│   │   ├── Home.jsx         # Landing page
-│   │   ├── Home.css
-│   │   ├── Destination.jsx  # Destination selection (4 planets)
-│   │   ├── Destination.css
-│   │   ├── Crew.jsx         # Crew members (4 members, dot navigation)
-│   │   ├── Crew.css
-│   │   ├── Technology.jsx   # Technology info (3 items, numbered navigation)
-│   │   └── Technology.css
-│   ├── data/                # Application data
-│   │   └── data.js          # Destinations, crew, and technology data
-│   ├── App.jsx              # Main app with routing setup
+│   ├── hooks/
+│   │   └── useDocumentTitle.js     # Dynamic browser tab titles
+│   ├── data/
+│   │   └── data.json               # All content (destinations, crew, tech)
+│   ├── App.jsx                     # Router + Preloader logic
 │   ├── App.css
-│   ├── main.jsx             # Application entry point
-│   └── index.css            # Global styles
-├── public/                  # Static assets (images, icons)
+│   ├── main.jsx
+│   └── index.css                   # Global design system
+├── public/
+│   └── assets/                     # Images for all pages
 ├── index.html
 ├── package.json
 └── vite.config.js
 ```
 
-## 🎯 Features
+## 🛠️ Tech Stack
 
-### Routing
-- **Home** (`/`) - Landing page with "Explore" CTA
-- **Destination** (`/destination`) - Interactive planet selection (Moon, Mars, Europa, Titan)
-- **Crew** (`/crew`) - Meet the crew with dot navigation (4 members)
-- **Technology** (`/technology`) - Space technology with numbered navigation (3 items)
+- **React 18** - UI library
+- **Vite** - Lightning-fast build tool
+- **React Router 6** - Client-side routing
+- **Framer Motion** - Production-ready animation library
+- **CSS Variables** - Design system with semantic tokens
 
-### Components Architecture
+## 📦 Installation
 
-#### Layout Component
-- Wraps all pages
-- Contains the shared Navbar
-- Uses React Router's `<Outlet />` for nested routing
+```bash
+# Install dependencies
+npm install
 
-#### Navbar Component
-- Desktop navigation with hover effects
-- Mobile hamburger menu
-- Active route highlighting using `NavLink`
-- Responsive design with backdrop blur effect
+# Run development server
+npm run dev
 
-#### Page Components
+# Build for production
+npm run build
 
-**Destination Page:**
-- Tab-based navigation for 4 planets
-- Dynamic content switching with `useState`
-- Displays: name, description, distance, travel time, and image
+# Preview production build
+npm run preview
+```
 
-**Crew Page:**
-- Dot navigation for 4 crew members
-- State management for selected crew member
-- Displays: role, name, bio, and image
+## 🎯 Key Implementation Details
 
-**Technology Page:**
-- Numbered button navigation (1, 2, 3)
-- State management for selected technology
-- Displays: name, description, and responsive images (portrait/landscape)
+### Animation System
+- **Preloader:** `requestAnimationFrame` for smooth 0-100% counter
+- **Page Transitions:** `AnimatePresence mode="wait"` with `location.pathname` key
+- **Sidebar:** Spring physics (`stiffness: 200`, `damping: 28`) for natural feel
+- **Crew Auto-Play:** `setInterval` with pause-on-hover via `onMouseEnter`/`onMouseLeave`
 
-### Data Structure
+### Responsive Strategy
+- **Breakpoints:** Mobile (<37.5em), Tablet (37.5-56.25em), Desktop (>56.26em)
+- **Crew Layout:** Different order on mobile (Image → Dots → Text) vs tablet (Text → Dots → Image)
+- **Technology:** Portrait images (desktop) vs landscape (mobile/tablet)
+- **Flexbox Order:** Used for mobile reordering without DOM changes
 
-All content is centralized in `src/data/data.js`:
-- `destinations[]` - 4 planet objects
-- `crew[]` - 4 crew member objects
-- `technology[]` - 3 technology objects
+### Design Tokens (CSS Variables)
+```css
+:root {
+  --font-serif: 'Bellefair', serif;
+  --font-sans-cond: 'Barlow Condensed', sans-serif;
+  --font-sans: 'Barlow', sans-serif;
+  --color-dark: 11 13 23;       /* #0B0D17 */
+  --color-light: 208 214 249;   /* #D0D6F9 */
+  --color-white: 255 255 255;   /* #FFFFFF */
+}
+```
 
-## 🛠️ Installation & Setup
+### UX Enhancements
+- **Click Outside:** Sidebar closes when clicking backdrop
+- **Escape Key:** Closes sidebar for keyboard users
+- **Auto-Play Pause:** Crew carousel pauses on hover for readability
+- **Keyboard Navigation:** Arrow keys navigate crew members
+- **Image Preloading:** Destinations preload all planet images on mount
+- **Accessible Navigation:** ARIA labels, roles, and semantic HTML
 
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+## 🎨 Styling Philosophy
 
-2. **Run development server:**
-   ```bash
-   npm run dev
-   ```
-
-3. **Build for production:**
-   ```bash
-   npm run build
-   ```
-
-4. **Preview production build:**
-   ```bash
-   npm run preview
-   ```
-
-## 📦 Dependencies
-
-- **React** - UI library
-- **React Router DOM** - Client-side routing
-- **Vite** - Build tool and dev server
-
-## 🎨 Styling Approach
-
-- Component-scoped CSS files
-- Responsive design with media queries
-- Mobile-first approach
-- CSS custom properties for theming (ready for implementation)
-
-## 🔄 State Management
-
-Currently using React's built-in `useState` for:
-- Selected destination/planet
-- Selected crew member (by index)
-- Selected technology (by index)
-- Mobile menu open/closed state
+- **Component-Scoped CSS** - Each component has its own CSS file
+- **BEM-like Naming** - `.crew__role`, `.destination__image-wrap`
+- **Design System First** - All colors/fonts use CSS variables
+- **No Inline Styles** - Clean separation of concerns
+- **Responsive Utilities** - Clamp for fluid typography and spacing
 
 ## 📱 Responsive Breakpoints
 
-- Desktop: > 1100px
-- Tablet: 768px - 1100px
-- Mobile: < 768px
+```css
+/* Mobile */
+@media (max-width: 37.5em)   /* 600px */
 
-## 🚧 Next Steps for Styling
+/* Tablet */
+@media (min-width: 37.51em) and (max-width: 56.25em)  /* 601-900px */
 
-1. Copy assets folder from the original project to `public/assets/`
-2. Fine-tune spacing and typography
-3. Add transitions and animations
-4. Implement accessibility features (ARIA labels, keyboard navigation)
-5. Add loading states for images
-6. Optimize performance with lazy loading
+/* Desktop */
+@media (min-width: 56.26em)  /* 901px+ */
+```
+
+## 🚀 Performance Optimizations
+
+- **Code Splitting** - React Router lazy loading ready
+- **Image Optimization** - WebP with PNG fallback
+- **Framer Motion** - Hardware-accelerated transforms
+- **CSS Variables** - No runtime JS for theming
+- **Minimal Dependencies** - Only essential libraries
+
+## 🧪 Code Quality
+
+- **Clean Architecture** - Separation of pages, components, layouts, hooks
+- **Reusable Components** - DestinationNav, CrewDots, TechNumbers
+- **DRY Principles** - No duplicate CSS, consolidated design tokens
+- **Semantic HTML** - Proper use of nav, main, section, article
+- **Linter-Clean** - No console logs, no unused imports
+
+## 🎓 Learning Resources
+
+This project demonstrates:
+- Advanced Framer Motion patterns (stagger, variants, AnimatePresence)
+- React Router 6 nested routes and layouts
+- Custom hooks (useDocumentTitle)
+- Complex responsive layouts (flexbox order, grid)
+- State management with useState and useRef
+- Event handling (keyboard, mouse, timers)
 
 ## 📝 Notes
 
-- All background images are referenced from `/assets/` in public folder
-- Font families: Barlow Condensed, Barlow, Bellefair (loaded via Google Fonts)
-- Clean architecture ready for scaling and adding more features
-- Easy to migrate to state management libraries (Redux, Zustand) if needed
+- **Fonts:** Loaded via Google Fonts CDN
+- **Images:** All assets in `/public/assets/` with organized subfolders
+- **Data:** Centralized in `data.json` for easy content updates
+- **Animations:** All framer-motion props preserved for smooth UX
+- **Accessibility:** ARIA labels, keyboard support, semantic markup
 
-## 🎯 Development Best Practices
+## 🔮 Future Enhancements
 
-- Component-based architecture
-- Separation of concerns (data, components, pages, layouts)
-- Reusable and maintainable code
-- Semantic HTML
-- Accessible navigation patterns
+- [ ] Add unit tests (Vitest + React Testing Library)
+- [ ] Implement error boundaries
+- [ ] Add loading skeletons for images
+- [ ] Optimize bundle size with lazy loading
+- [ ] Add PWA support (service worker, manifest)
+- [ ] Implement dark/light mode toggle
+- [ ] Add analytics integration
+- [ ] Create Storybook for component documentation
+
+## 📄 License
+
+This project is part of a Frontend Mentor challenge.
+
+---
+
+Built with ❤️ using React, Framer Motion, and modern web standards.
