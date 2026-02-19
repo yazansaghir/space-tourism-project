@@ -1,0 +1,42 @@
+/* --- Destination tab nav: pixel-perfect states --- */
+.destination-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
+  text-transform: uppercase;
+  letter-spacing: 2.7px;
+  font-family: var(--font-sans-cond);
+}
+
+@media only screen and (min-width: 56.26em) {
+  .destination-nav {
+    justify-content: flex-start;
+    gap: clamp(1.25rem, 1.5vw, 2rem);
+    margin-bottom: clamp(1.5rem, 2.5vw, 2rem);
+  }
+}
+
+.destination-nav__tab {
+  font-size: 0.875rem;
+  letter-spacing: 2.7px;
+  color: rgb(var(--color-light));
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 0 0 0.5rem 0;
+  cursor: pointer;
+  transition: border-color 0.25s ease, color 0.25s ease;
+  font-family: var(--font-sans-cond);
+  text-transform: uppercase;
+}
+
+.destination-nav__tab:hover {
+  border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+
+.destination-nav__tab--active {
+  color: rgb(var(--color-white));
+  border-bottom: 3px solid rgb(var(--color-white));
+}

@@ -1,0 +1,193 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow&family=Barlow+Condensed:wght@400;700&family=Bellefair&display=swap");
+
+:root {
+  --font-serif: "Bellefair", serif; /* For Headings */
+  --font-sans-cond: "Barlow Condensed", sans-serif; /* For Nav & Subheadings */
+  --font-sans: "Barlow", sans-serif; /* For Body Text */
+
+  /* Colors */
+  --color-dark: 11 13 23; /* #0B0D17 (Background) */
+  --color-light: 208 214 249; /* #D0D6F9 (Light Blue/Grey) */
+  --color-white: 255 255 255; /* #FFFFFF */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+html {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: rgb(var(--color-light));
+  line-height: 1.5;
+  background-color: rgb(var(--color-dark));
+  overflow-x: hidden;
+}
+
+/* --- Base typography --- */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  text-transform: uppercase;
+  color: rgb(var(--color-white));
+}
+
+/* Subheadings (h5) & Nav Text */
+h5,
+nav,
+button {
+  font-family: var(--font-sans-cond);
+  letter-spacing: 2.7px;
+  text-transform: uppercase;
+}
+
+p {
+  font-family: var(--font-sans);
+}
+
+/* --- Typography utility classes --- */
+.ff-serif {
+  font-family: var(--font-serif);
+}
+
+.ff-sans-cond {
+  font-family: var(--font-sans-cond);
+}
+
+.ff-sans {
+  font-family: var(--font-sans);
+}
+
+.text-white {
+  color: rgb(var(--color-white));
+}
+
+.text-accent {
+  color: rgb(var(--color-light));
+}
+
+a {
+  text-decoration: none;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Home: full-screen background, fixed for premium scroll */
+.home {
+  background-image: url(/assets/home/background-home-desktop.jpg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+}
+
+@media only screen and (max-width: 56.25em) {
+  .home {
+    background-image: url(/assets/home/background-home-tablet.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 31.25em) {
+  .home {
+    background-image: url(/assets/home/background-home-mobile.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    width: 100%;
+  }
+}
+
+/* Destination: full scrollable background */
+.wrap.destination {
+  background-image: url(/assets/destination/background-destination-mobile.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+}
+
+@media only screen and (min-width: 37.51em) {
+  .wrap.destination {
+    background-image: url(/assets/destination/background-destination-tablet.jpg);
+  }
+}
+
+@media only screen and (min-width: 56.26em) {
+  .wrap.destination {
+    background-image: url(/assets/destination/background-destination-desktop.jpg);
+  }
+}
+
+/* Crew: full scrollable area background */
+.wrap.crew {
+  background-image: url(/assets/crew/background-crew-mobile.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+}
+
+@media only screen and (min-width: 37.51em) {
+  .wrap.crew {
+    background-image: url(/assets/crew/background-crew-tablet.jpg);
+  }
+}
+
+@media only screen and (min-width: 56.26em) {
+  .wrap.crew {
+    background-image: url(/assets/crew/background-crew-desktop.jpg);
+  }
+}
+
+/* Technology: full scrollable area background */
+.wrap.technology {
+  background-image: url(/assets/technology/background-technology-mobile.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+}
+
+@media only screen and (min-width: 37.51em) {
+  .wrap.technology {
+    background-image: url(/assets/technology/background-technology-tablet.jpg);
+  }
+}
+
+@media only screen and (min-width: 56.26em) {
+  .wrap.technology {
+    background-image: url(/assets/technology/background-technology-desktop.jpg);
+  }
+}

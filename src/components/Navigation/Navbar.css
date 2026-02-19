@@ -1,0 +1,129 @@
+.navbar {
+  padding: 40px 0 0 55px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: relative;
+  background: transparent;
+}
+
+@media only screen and (max-width: 68.75em) {
+  .navbar {
+    padding: 0 0 40px 39px;
+  }
+}
+
+@media only screen and (max-width: 37.5em) {
+  .navbar {
+    padding: 24px;
+  }
+}
+
+.navbar__line {
+  z-index: 1;
+  height: 1px;
+  width: 100%;
+  background: rgb(var(--color-white));
+  mix-blend-mode: normal;
+  opacity: 0.25;
+  margin: 0 -25px 0 64px;
+}
+
+@media only screen and (max-width: 68.75em) {
+  .navbar__line {
+    display: none;
+  }
+}
+
+.navbar__icon {
+  display: none;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 37.5em) {
+  .navbar__icon {
+    display: block;
+  }
+}
+
+.navbar__text {
+  z-index: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  gap: 50px;
+  background: rgba(255, 255, 255, 0.04);
+  -webkit-backdrop-filter: blur(81.5485px);
+  backdrop-filter: blur(81.5485px);
+  padding: 38px 165px 0 123px;
+}
+
+@media only screen and (max-width: 68.75em) {
+  .navbar__text {
+    padding: 38px 47px 0 47px;
+  }
+}
+
+@media only screen and (max-width: 37.5em) {
+  .navbar__text {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 68.75em) {
+  .navbar__text--number {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 37.5em) {
+  .navbar__text--number {
+    display: block;
+  }
+}
+
+.navbar__text--wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 11px;
+  padding-bottom: 38px;
+}
+
+.navbar__text--wrap:hover {
+  padding-bottom: 35px;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+.navbar__text--wrap_active {
+  padding-bottom: 35px;
+  border-bottom: 3px solid rgb(var(--color-white)) !important;
+}
+
+.nav-text {
+  font-family: var(--font-sans-cond);
+  color: rgb(var(--color-white));
+  font-size: 16px;
+  letter-spacing: 2.7px;
+  text-transform: uppercase;
+}
+
+@media only screen and (max-width: 56.25em) {
+  .nav-text {
+    font-size: 14px;
+    letter-spacing: 2.36px;
+  }
+}
+
+.nav-text--bold {
+  font-weight: 700;
+}

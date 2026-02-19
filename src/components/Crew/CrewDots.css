@@ -1,0 +1,31 @@
+.crew-dots {
+  display: flex;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+.crew-dots__dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  cursor: pointer;
+  opacity: 0.2;
+  transition: opacity 0.3s ease;
+}
+
+.crew-dots__dot:hover {
+  opacity: 0.5;
+}
+
+.crew-dots__dot--active {
+  opacity: 1;
+}
+
+@media only screen and (max-width: 56.25em) {
+  .crew-dots__dot {
+    width: 10px;
+    height: 10px;
+  }
+}

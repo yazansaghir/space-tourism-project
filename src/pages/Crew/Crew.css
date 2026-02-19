@@ -1,0 +1,245 @@
+/* --- Crew page: scroll-friendly, padding for navbar + bottom --- */
+.crew-page {
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 120px;
+  padding-bottom: 3rem;
+}
+
+@media only screen and (max-width: 56.25em) {
+  .crew-page {
+    padding-top: clamp(6rem, 15vh, 8rem);
+    padding-bottom: 4rem;
+  }
+}
+
+/* Main container: max-width wrapper, centered */
+.crew__container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 5vw, 2.5rem);
+}
+
+.crew__page-title {
+  font-family: var(--font-sans-cond);
+  color: rgb(var(--color-white));
+  font-size: clamp(1rem, 2.5vw, 1.75rem);
+  letter-spacing: 4.75px;
+  text-transform: uppercase;
+  font-weight: 400;
+  margin: 0 0 clamp(2rem, 4vw, 3rem) 0;
+  text-align: center;
+}
+
+@media only screen and (min-width: 56.26em) {
+  .crew__page-title {
+    text-align: left;
+  }
+}
+
+.crew__page-number {
+  opacity: 0.25;
+  font-weight: 700;
+  margin-right: 1rem;
+}
+
+/* --- Content: Desktop = row (text left, image right); Mobile = column (image on top via order) --- */
+.crew__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(2rem, 4vw, 3rem);
+}
+
+@media only screen and (min-width: 56.26em) {
+  .crew__content {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+}
+
+/* Mobile only: Image (Top) → Border → Dots → Text. Tablet: Text → Dots → Image */
+@media only screen and (max-width: 37.5em) {
+  .crew__image-wrap {
+    order: -1;
+  }
+}
+
+/* --- Left column: Text + Dots (Desktop ~50–60%, vertically balanced) --- */
+.crew__info {
+  width: 100%;
+  max-width: 32rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+@media only screen and (min-width: 56.26em) {
+  .crew__info {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    width: 55%;
+    text-align: left;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    padding-bottom: 0;
+  }
+}
+
+/* Dots below bio on desktop (with margin-top); mobile order for Image → Dots → Text */
+.crew__info .crew-dots {
+  margin-top: 0;
+}
+
+@media only screen and (min-width: 56.26em) {
+  .crew__info .crew-dots {
+    margin-top: 2.5rem;
+  }
+}
+
+@media only screen and (max-width: 37.5em) {
+  .crew__info .crew-dots {
+    order: 1;
+  }
+
+  .crew__info .crew__text {
+    order: 2;
+  }
+}
+
+.crew__text {
+  margin: 0;
+}
+
+/* Role: opacity 0.5 */
+.crew__role {
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 2vw, 2rem);
+  text-transform: uppercase;
+  color: rgb(var(--color-white));
+  opacity: 0.5;
+  margin: 0 0 0.5rem 0;
+  font-weight: 400;
+}
+
+/* Name: huge */
+.crew__name {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 5vw, 3.5rem);
+  text-transform: uppercase;
+  color: rgb(var(--color-white));
+  margin: 0 0 1rem 0;
+  line-height: 1.15;
+}
+
+/* Bio: max-width 45ch, left-aligned on desktop */
+.crew__bio {
+  font-family: var(--font-sans);
+  font-size: clamp(0.9375rem, 1.1vw, 1.125rem);
+  line-height: 1.75;
+  color: rgb(var(--color-light));
+  margin: 0;
+  max-width: 45ch;
+}
+
+@media only screen and (max-width: 56.25em) {
+  .crew__bio {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* --- Right column: Image at bottom baseline (Desktop ~40–50%) --- */
+.crew__image-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media only screen and (max-width: 56.25em) {
+  .crew__image-wrap {
+    height: 300px;
+    min-height: 300px;
+    align-items: center;
+  }
+}
+
+@media only screen and (min-width: 56.26em) {
+  .crew__image-wrap {
+    flex: 0 1 45%;
+    min-width: 0;
+    align-self: flex-end;
+    justify-content: center;
+    align-items: flex-end;
+    border-bottom: none;
+    min-height: 0;
+  }
+}
+
+.crew__image-inner {
+  width: 100%;
+  max-width: 12rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100%;
+}
+
+@media only screen and (min-width: 37.51em) {
+  .crew__image-inner {
+    max-width: 20rem;
+  }
+}
+
+@media only screen and (max-width: 56.25em) {
+  .crew__image-inner {
+    max-width: 100%;
+    height: 100%;
+  }
+}
+
+@media only screen and (min-width: 56.26em) {
+  .crew__image-inner {
+    max-width: none;
+    width: 100%;
+    align-items: flex-end;
+  }
+}
+
+.crew__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-position: bottom center;
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  max-width: 100%;
+  align-self: flex-end;
+}
+
+@media only screen and (max-width: 56.25em) {
+  .crew__image {
+    height: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    object-position: center bottom;
+  }
+}
+
+@media only screen and (min-width: 56.26em) {
+  .crew__image {
+    max-height: 90vh;
+    object-fit: contain;
+    object-position: bottom center;
+  }
+}

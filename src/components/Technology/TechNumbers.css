@@ -1,0 +1,61 @@
+.tech-numbers {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.tech-numbers__btn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgb(var(--color-white));
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+  flex-shrink: 0;
+}
+
+.tech-numbers__btn:hover {
+  border-color: rgb(var(--color-white));
+  background: transparent;
+  color: rgb(var(--color-white));
+}
+
+.tech-numbers__btn--active {
+  background: rgb(var(--color-white));
+  border: none;
+  color: rgb(var(--color-dark));
+}
+
+.tech-numbers__btn--active:hover {
+  background: rgb(var(--color-white));
+  border: none;
+  color: rgb(var(--color-dark));
+}
+
+/* Tablet / Mobile: horizontal row */
+@media only screen and (max-width: 56.25em) {
+  .tech-numbers {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .tech-numbers__btn {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+}
+
+@media only screen and (max-width: 31.25em) {
+  .tech-numbers__btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}
