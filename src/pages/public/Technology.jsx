@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import data from "../../data/data.json";
+import { api } from "../../utils/api";
 import TechNumbers from "../../components/Technology/TechNumbers";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 
-const TECHNOLOGY = data.technology;
+function extractList(res) {
+  const d = res?.data;
+  if (!d) return [];
+  if (Array.isArray(d.data)) return d.data;
+  if (Array.isArray(d)) return d;
+  return d.technology ?? [];
+}
 
 function toPublicPath(path) {
   if (!path) return "";
@@ -14,11 +20,67 @@ function toPublicPath(path) {
 const textTransition = { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] };
 const imageTransition = { duration: 0.35, ease: "easeOut" };
 
+function PageLoader() {
+  return (
+    <div className="flex-1 min-h-screen flex items-center justify-center pt-[120px] pb-12 md:pt-[clamp(5rem,12vh,7rem)]">
+      <div className="flex flex-col items-center gap-6">
+        <div
+          className="w-12 h-12 rounded-full border-2 border-space-accent/30 border-t-space-accent animate-spin"
+          aria-hidden="true"
+        />
+        <p className="font-sans text-space-accent/80 text-sm">Loading technology…</p>
+      </div>
+    </div>
+  );
+}
+
+function PageError({ message }) {
+  return (
+    <div className="flex-1 min-h-screen flex items-center justify-center pt-[120px] pb-12">
+      <div className="text-center max-w-md">
+        <p className="font-sans text-red-400">{message}</p>
+      </div>
+    </div>
+  );
+}
+
+function PageEmpty({ message }) {
+  return (
+    <div className="flex-1 min-h-screen flex items-center justify-center pt-[120px] pb-12">
+      <p className="font-sans text-space-accent/80 text-center">{message}</p>
+    </div>
+  );
+}
+
 export default function Technology() {
   useDocumentTitle("Technology");
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const current = TECHNOLOGY[currentIndex];
 
+  useEffect(() => {
+    let cancelled = false;
+    setIsLoading(true);
+    setError(null);
+    api
+      .get("/technology")
+      .then((res) => {
+        if (cancelled) return;
+        const list = extractList(res);
+        setData(list);
+        setCurrentIndex(0);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err?.message ?? "Failed to load technology.");
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  const current = data[currentIndex];
   const portraitSrc = current?.images?.portrait
     ? toPublicPath(current.images.portrait)
     : "";
@@ -26,33 +88,25 @@ export default function Technology() {
     ? toPublicPath(current.images.landscape)
     : "";
 
+  if (isLoading) return <PageLoader />;
+  if (error) return <PageError message={error} />;
+  if (!data.length) return <PageEmpty message="No technology available at the moment." />;
+
   return (
-    /*
-      Outer wrapper: flex column, padding top mirrors Crew page.
-      On desktop the left padding is wide (no right padding) so the
-      portrait image can bleed to the right edge.
-    */
     <div className="flex-1 min-h-screen flex flex-col pt-[120px] pb-12 md:pt-[clamp(5rem,12vh,7rem)] md:pb-16">
       <div className="w-full flex-1 flex flex-col pl-[clamp(1.5rem,5vw,2.5rem)] pr-[clamp(1.5rem,5vw,2.5rem)] md:pl-[clamp(1.5rem,8vw,10rem)] lg:pr-0">
 
-        {/* Page title */}
         <h5 className="font-sans-cond font-normal text-white uppercase tracking-subheading text-[clamp(1rem,2.5vw,1.75rem)] mb-[clamp(2rem,4vw,3rem)] text-center md:text-left">
           <span className="opacity-25 font-bold mr-4">03</span>
           Space launch 101
         </h5>
 
-        {/*
-          Layout:
-            Mobile / tablet (<lg): column — content first in DOM, image second; flex-col-reverse so image appears on top, then content
-            Desktop (lg+):         row    — [numbers | text] left, image strict right
-        */}
         <div className="flex flex-col-reverse lg:flex-row lg:items-center lg:justify-between gap-8 flex-1 lg:gap-[clamp(3rem,5vw,5rem)]">
 
-          {/* Left: Numbers + text content — first in DOM so on lg it appears on the left */}
           <div className="flex flex-col items-center gap-[clamp(1.5rem,3vw,2.5rem)] text-center max-w-[32rem] w-full lg:flex-row lg:items-center lg:text-left lg:gap-[clamp(3rem,4vw,5rem)] lg:max-w-none lg:w-auto lg:flex-none">
 
             <TechNumbers
-              technologyList={TECHNOLOGY}
+              technologyList={data}
               currentIndex={currentIndex}
               setCurrentIndex={setCurrentIndex}
             />
@@ -81,7 +135,6 @@ export default function Technology() {
             </AnimatePresence>
           </div>
 
-          {/* Right: Image — second in DOM so on lg it sits on the right; strict right alignment on desktop */}
           <div className="w-full lg:w-auto lg:flex-shrink-0 lg:flex lg:justify-end lg:self-stretch lg:items-center">
             <AnimatePresence mode="wait" initial={false}>
               {current && (
@@ -93,14 +146,12 @@ export default function Technology() {
                   exit={{ opacity: 0, y: 16 }}
                   transition={imageTransition}
                 >
-                  {/* Landscape — shown on mobile/tablet only */}
                   <img
                     src={landscapeSrc}
                     alt={current.name}
                     className="block lg:hidden w-full h-auto object-cover"
                     loading="eager"
                   />
-                  {/* Portrait — shown on desktop only, flush right */}
                   <img
                     src={portraitSrc}
                     alt={current.name}

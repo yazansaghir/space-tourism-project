@@ -30,9 +30,35 @@
   a {
     text-decoration: none;
   }
+
+  /* Global dark scrollbar — #0B0D17 theme */
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: rgba(11, 13, 23, 0.4);
+    border-radius: 4px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
 }
 
 @layer utilities {
+  /* Optional class for scrollbar (Firefox scrollbar-width/color) */
+  .scrollbar-dark {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(11, 13, 23, 0.4);
+  }
+
   /* Crew member image fade-to-transparent at bottom */
   .crew-img-mask {
     mask-image: linear-gradient(to bottom, black 70%, transparent 100%);

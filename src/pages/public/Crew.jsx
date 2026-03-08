@@ -1,10 +1,21 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import data from "../../data/data.json";
+import { api } from "../../utils/api";
 import CrewDots from "../../components/Crew/CrewDots";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 
-const CREW = data.crew;
+function extractList(res) {
+  const d = res?.data;
+  if (!d) return [];
+  if (Array.isArray(d.data)) return d.data;
+  if (Array.isArray(d)) return d;
+  return d.crew ?? [];
+}
+
+function toPublicPath(path) {
+  if (!path) return "";
+  return path.startsWith("./") ? path.replace("./", "/") : path;
+}
 
 const TEXT_VARIANTS = {
   container: {
@@ -38,78 +49,116 @@ const IMAGE_TRANSITION = {
   damping: 20,
 };
 
-function toPublicPath(path) {
-  if (!path) return "";
-  return path.startsWith("./") ? path.replace("./", "/") : path;
+function PageLoader() {
+  return (
+    <div className="flex-1 min-h-screen flex items-center justify-center pt-[120px] pb-12 md:pt-[clamp(6rem,15vh,8rem)]">
+      <div className="flex flex-col items-center gap-6">
+        <div
+          className="w-12 h-12 rounded-full border-2 border-space-accent/30 border-t-space-accent animate-spin"
+          aria-hidden="true"
+        />
+        <p className="font-sans text-space-accent/80 text-sm">Loading crew…</p>
+      </div>
+    </div>
+  );
+}
+
+function PageError({ message }) {
+  return (
+    <div className="flex-1 min-h-screen flex items-center justify-center pt-[120px] pb-12">
+      <div className="text-center max-w-md">
+        <p className="font-sans text-red-400">{message}</p>
+      </div>
+    </div>
+  );
+}
+
+function PageEmpty({ message }) {
+  return (
+    <div className="flex-1 min-h-screen flex items-center justify-center pt-[120px] pb-12">
+      <p className="font-sans text-space-accent/80 text-center">{message}</p>
+    </div>
+  );
 }
 
 export default function Crew() {
   useDocumentTitle("Crew");
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [autoPlayPaused, setAutoPlayPaused] = useState(false);
   const intervalRef = useRef(null);
-  const current = CREW[currentIndex];
+
+  useEffect(() => {
+    let cancelled = false;
+    setIsLoading(true);
+    setError(null);
+    api
+      .get("/crew")
+      .then((res) => {
+        if (cancelled) return;
+        const list = extractList(res);
+        setData(list);
+        setCurrentIndex(0);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err?.message ?? "Failed to load crew.");
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === "ArrowLeft")
-        setCurrentIndex((i) => (i <= 0 ? CREW.length - 1 : i - 1));
+        setCurrentIndex((i) => (i <= 0 ? data.length - 1 : i - 1));
       if (e.key === "ArrowRight")
-        setCurrentIndex((i) => (i >= CREW.length - 1 ? 0 : i + 1));
+        setCurrentIndex((i) => (i >= data.length - 1 ? 0 : i + 1));
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, []);
+  }, [data.length]);
 
   useEffect(() => {
-    if (autoPlayPaused) {
+    if (autoPlayPaused || data.length === 0) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
       return;
     }
     intervalRef.current = setInterval(() => {
-      setCurrentIndex((i) => (i >= CREW.length - 1 ? 0 : i + 1));
+      setCurrentIndex((i) => (i >= data.length - 1 ? 0 : i + 1));
     }, 6000);
     return () => clearInterval(intervalRef.current);
-  }, [autoPlayPaused]);
+  }, [autoPlayPaused, data.length]);
 
+  const current = data[currentIndex];
   const imageSrc = current?.images?.webp
     ? toPublicPath(current.images.webp)
     : toPublicPath(current?.images?.png || "");
 
+  if (isLoading) return <PageLoader />;
+  if (error) return <PageError message={error} />;
+  if (!data.length) return <PageEmpty message="No crew available at the moment." />;
+
   return (
-    /*
-      flex-1 fills remaining viewport below navbar.
-      Padding: top 120px desktop, scaled down for tablet/mobile.
-    */
     <div className="flex-1 min-h-screen flex items-center pt-[120px] pb-12 md:pt-[clamp(6rem,15vh,8rem)] md:pb-16">
       <div className="w-full max-w-[1100px] mx-auto px-[clamp(1.5rem,5vw,2.5rem)]">
 
-        {/* Page title */}
         <h5 className="font-sans-cond font-normal text-white uppercase tracking-subheading text-[clamp(1rem,2.5vw,1.75rem)] mb-[clamp(2rem,4vw,3rem)] text-center md:text-left">
           <span className="opacity-25 font-bold mr-4">02</span>
           Meet your crew
         </h5>
 
-        {/*
-          Layout:
-            Mobile (<sm):   column — image (top) → dots → text
-            Tablet (sm–md): column — text+dots → image
-            Desktop (md+):  row    — info (left) | image (right, aligned to bottom)
-
-          The image-wrap uses `order-first` on mobile so it renders above the info
-          block even though it appears second in the DOM.
-        */}
         <div className="flex flex-col items-center gap-[clamp(2rem,4vw,3rem)] md:flex-row md:justify-between md:gap-[clamp(2rem,4vw,4rem)]">
 
-          {/* Info column: text + dots */}
           <div
             className="w-full max-w-[32rem] text-center flex flex-col items-center gap-8 md:flex-1 md:min-w-0 md:w-[55%] md:max-w-none md:text-left md:items-start md:justify-center md:gap-0"
             onMouseEnter={() => setAutoPlayPaused(true)}
             onMouseLeave={() => setAutoPlayPaused(false)}
           >
-            {/* On mobile: dots first (order-1), text second (order-2).
-                On tablet+: natural DOM order (text then dots). */}
             <AnimatePresence mode="wait" initial={false}>
               {current && (
                 <motion.div
@@ -121,7 +170,6 @@ export default function Crew() {
                   exit="exit"
                   transition={{ duration: 0.35, ease: "easeInOut" }}
                 >
-                  {/* Role — 50% opacity */}
                   <motion.h4
                     className="font-serif text-white uppercase opacity-50 text-[clamp(1rem,2vw,2rem)] mb-2"
                     variants={TEXT_VARIANTS.role}
@@ -130,7 +178,6 @@ export default function Crew() {
                     {current.role}
                   </motion.h4>
 
-                  {/* Name */}
                   <motion.h3
                     className="font-serif text-white uppercase text-[clamp(1.5rem,5vw,3.5rem)] leading-[1.15] mb-4"
                     variants={TEXT_VARIANTS.name}
@@ -139,7 +186,6 @@ export default function Crew() {
                     {current.name}
                   </motion.h3>
 
-                  {/* Bio */}
                   <motion.p
                     className="font-sans text-space-accent text-[clamp(0.9375rem,1.1vw,1.125rem)] leading-[1.75] max-w-[45ch] mx-auto md:mx-0"
                     variants={TEXT_VARIANTS.bio}
@@ -151,20 +197,16 @@ export default function Crew() {
               )}
             </AnimatePresence>
 
-            {/* Dots: below bio on desktop (mt applied), swapped above text on mobile via order */}
             <div className="order-1 sm:order-none md:mt-10">
               <CrewDots
-                crew={CREW}
+                crew={data}
                 currentIndex={currentIndex}
                 setCurrentIndex={setCurrentIndex}
               />
             </div>
           </div>
 
-          {/* Image column — goes first on mobile (order-first), normal on tablet+ */}
-          <div
-            className="order-first sm:order-none w-full flex justify-center items-end border-b border-white/10 md:flex-none md:w-[45%] md:min-w-0 md:self-end md:border-b-0 h-[300px] md:h-auto"
-          >
+          <div className="order-first sm:order-none w-full flex justify-center items-end border-b border-white/10 md:flex-none md:w-[45%] md:min-w-0 md:self-end md:border-b-0 h-[300px] md:h-auto">
             <AnimatePresence mode="wait" initial={false}>
               {current && (
                 <motion.div
@@ -185,7 +227,6 @@ export default function Crew() {
                     <img
                       src={imageSrc}
                       alt={current.name}
-                      /* crew-img-mask fades image to transparent at bottom (defined in index.css) */
                       className="crew-img-mask w-full h-auto max-h-[300px] md:max-h-[90vh] block object-contain object-bottom self-end"
                       loading="eager"
                     />

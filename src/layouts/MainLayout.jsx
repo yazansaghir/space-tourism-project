@@ -22,7 +22,7 @@ const PAGE_BG = {
     "bg-technology-mobile sm:bg-technology-tablet md:bg-technology-desktop",
 };
 
-const Layout = () => {
+const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
 
@@ -61,4 +61,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default MainLayout;
