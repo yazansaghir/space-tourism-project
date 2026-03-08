@@ -7,7 +7,6 @@ import Destination from "./pages/Destination/Destination";
 import Crew from "./pages/Crew/Crew";
 import Technology from "./pages/Technology/Technology";
 import Preloader from "./components/Preloader";
-import "./App.css";
 
 const PRELOAD_DURATION_MS = 2500;
 

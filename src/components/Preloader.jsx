@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import "./Preloader.css";
 
 const DURATION_MS = 2500;
 
@@ -26,24 +25,34 @@ export default function Preloader() {
 
   return (
     <motion.div
-      className="preloader"
+      className="fixed inset-0 z-[9999] bg-space-dark flex items-center justify-center"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
     >
-      <div className="preloader__inner">
-        <p className="preloader__percent" aria-live="polite">
+      <div className="w-full max-w-[20rem] px-6 flex flex-col items-center gap-4">
+        {/* Percentage counter */}
+        <p
+          className="font-sans-cond text-white text-[clamp(1.5rem,4vw,2rem)] tracking-[0.2em]"
+          aria-live="polite"
+        >
           {String(percent).padStart(2, "0")}%
         </p>
-        <div className="preloader__track">
+
+        {/* Progress track */}
+        <div className="w-full h-px bg-white/20 overflow-hidden">
           <motion.div
-            className="preloader__bar"
+            className="h-full bg-white will-change-[width]"
             initial={{ width: "0%" }}
             animate={{ width: `${percent}%` }}
             transition={{ duration: 0.15, ease: "linear" }}
           />
         </div>
-        <p className="preloader__label">INITIATING LAUNCH SEQUENCE...</p>
+
+        {/* Label */}
+        <p className="font-sans-cond text-white/70 text-[clamp(0.625rem,1.5vw,0.75rem)] tracking-[0.3em] uppercase">
+          Initiating launch sequence...
+        </p>
       </div>
     </motion.div>
   );
