@@ -21,10 +21,10 @@ function toPublicPath(path) {
 const TEXT_VARIANTS = {
   container: {
     animate: {
-      transition: { staggerChildren: 0.12, delayChildren: 0.08 },
+      transition: { staggerChildren: 0.05, delayChildren: 0.02 },
     },
     exit: {
-      transition: { staggerChildren: 0.06, staggerDirection: -1 },
+      transition: { staggerChildren: 0.03, staggerDirection: -1 },
     },
   },
   role: {
@@ -46,8 +46,8 @@ const TEXT_VARIANTS = {
 
 const IMAGE_TRANSITION = {
   type: "spring",
-  stiffness: 80,
-  damping: 20,
+  stiffness: 200,
+  damping: 25,
 };
 
 const CREW_IMAGE_HEIGHT = "h-[300px] md:h-[420px]";
@@ -189,12 +189,12 @@ export default function Crew() {
                     initial="initial"
                     animate="animate"
                     exit="exit"
-                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                    transition={{ duration: 0.2, ease: "easeInOut" }}
                   >
                     <motion.h4
                       className="font-serif text-white uppercase opacity-50 text-[clamp(1rem,2vw,2rem)] mb-2"
                       variants={TEXT_VARIANTS.role}
-                      transition={{ duration: 0.35 }}
+                      transition={{ duration: 0.2 }}
                     >
                       {current.role}
                     </motion.h4>
@@ -202,7 +202,7 @@ export default function Crew() {
                     <motion.h3
                       className="font-serif text-white uppercase text-[clamp(1.5rem,5vw,3.5rem)] leading-[1.15] mb-4"
                       variants={TEXT_VARIANTS.name}
-                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
                     >
                       {current.name}
                     </motion.h3>
@@ -210,7 +210,7 @@ export default function Crew() {
                     <motion.p
                       className="font-sans text-space-accent text-[clamp(0.9375rem,1.1vw,1.125rem)] leading-[1.75] max-w-[45ch] mx-auto md:mx-0 min-h-[120px]"
                       variants={TEXT_VARIANTS.bio}
-                      transition={{ duration: 0.35, delay: 0.1 }}
+                      transition={{ duration: 0.2, delay: 0.03 }}
                     >
                       {current.bio}
                     </motion.p>

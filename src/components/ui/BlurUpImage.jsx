@@ -15,7 +15,7 @@ export default function BlurUpImage({
   const [loaded, setLoaded] = useState(false);
 
   const imageClass = [
-    "transition-all duration-700",
+    "transition-all duration-200",
     loaded ? "blur-0 opacity-100" : "blur-md opacity-50",
     className,
   ]

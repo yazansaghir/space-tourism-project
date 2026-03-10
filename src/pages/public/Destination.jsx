@@ -145,7 +145,7 @@ export default function Destination() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.35, ease: "easeInOut" }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
               >
                 <picture className="w-full h-full flex justify-center items-center">
                   {current?.images?.webp && (
@@ -181,9 +181,9 @@ export default function Destination() {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.35, ease: "easeInOut" }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
                   variants={{
-                    container: { transition: { staggerChildren: 0.08, delayChildren: 0.02 } },
+                    container: { transition: { staggerChildren: 0.05, delayChildren: 0.02 } },
                   }}
                   initial="initial"
                   animate="animate"
@@ -191,7 +191,7 @@ export default function Destination() {
                   <motion.h2
                     className="font-serif text-white uppercase text-[clamp(3.5rem,10vw,6.25rem)] leading-[1.15] mb-[clamp(0.75rem,1.5vw,1rem)]"
                     variants={{ initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 } }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.2 }}
                   >
                     {current.name}
                   </motion.h2>
@@ -199,7 +199,7 @@ export default function Destination() {
                   <motion.p
                     className="font-sans text-space-accent text-[clamp(0.9375rem,1.1vw,1.125rem)] leading-[1.78] mb-[clamp(1.5rem,3vw,2.5rem)] min-h-[120px]"
                     variants={{ initial: { opacity: 0 }, animate: { opacity: 1 } }}
-                    transition={{ duration: 0.3, delay: 0.05 }}
+                    transition={{ duration: 0.2, delay: 0.02 }}
                   >
                     {current.description}
                   </motion.p>
@@ -209,7 +209,7 @@ export default function Destination() {
                   <motion.div
                     className="flex flex-col items-center gap-[clamp(1.5rem,2vw,2rem)] sm:flex-row sm:gap-[clamp(2rem,3vw,3rem)] md:justify-start md:items-start md:gap-[clamp(3rem,4vw,5rem)]"
                     variants={{ initial: { opacity: 0 }, animate: { opacity: 1 } }}
-                    transition={{ duration: 0.3, delay: 0.1 }}
+                    transition={{ duration: 0.2, delay: 0.04 }}
                   >
                     <div>
                       <p className="font-sans-cond text-space-accent text-[0.875rem] tracking-[0.146875rem] uppercase mb-2">

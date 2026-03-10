@@ -18,8 +18,8 @@ function toPublicPath(path) {
   return path.startsWith("./") ? path.replace("./", "/") : path;
 }
 
-const textTransition = { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] };
-const imageTransition = { duration: 0.35, ease: "easeOut" };
+const textTransition = { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] };
+const imageTransition = { duration: 0.2, ease: "easeOut" };
 
 const TECH_IMAGE_LANDSCAPE_HEIGHT = "h-[170px] sm:h-[310px]";
 const TECH_IMAGE_PORTRAIT_DIMS = "w-full max-w-[515px] h-[300px] lg:h-[527px]";
@@ -139,7 +139,7 @@ export default function Technology() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
-                  transition={{ ...textTransition, delay: 0.05 }}
+                  transition={{ ...textTransition, delay: 0.02 }}
                 >
                   <p className="font-sans-cond text-space-accent text-[clamp(0.875rem,1.2vw,1rem)] tracking-nav uppercase mb-2">
                     The terminology…
@@ -148,7 +148,7 @@ export default function Technology() {
                     className="font-serif text-white uppercase text-[clamp(1.5rem,4vw,3.5rem)] leading-[1.15] mb-4"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ ...textTransition, delay: 0.1 }}
+                    transition={{ ...textTransition, delay: 0.04 }}
                   >
                     {current.name}
                   </motion.h3>
@@ -156,7 +156,7 @@ export default function Technology() {
                     className="font-sans text-space-accent text-[clamp(0.9375rem,1.1vw,1.125rem)] leading-[1.75] max-w-[45ch] mx-auto lg:mx-0 min-h-[100px]"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ ...textTransition, delay: 0.15 }}
+                    transition={{ ...textTransition, delay: 0.06 }}
                   >
                     {current.description}
                   </motion.p>
@@ -174,7 +174,7 @@ export default function Technology() {
                   initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 16 }}
-                  transition={{ ...imageTransition, delay: 0.08 }}
+                  transition={{ ...imageTransition, delay: 0.02 }}
                 >
                   <BlurUpImage
                     src={landscapeSrc}
