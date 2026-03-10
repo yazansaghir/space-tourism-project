@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { api } from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -6,15 +6,18 @@ const emptyForm = {
   name: "",
   description: "",
   status: "DRAFT",
-  imagePortrait: "",
-  imageLandscape: "",
+  images: { portrait: "", landscape: "" },
   order: 0,
 };
 
 export default function TechnologyModal({ isOpen, onClose, technology, onSuccess }) {
   const [form, setForm] = useState(emptyForm);
   const [submitting, setSubmitting] = useState(false);
+  const [uploadingPortrait, setUploadingPortrait] = useState(false);
+  const [uploadingLandscape, setUploadingLandscape] = useState(false);
   const [error, setError] = useState("");
+  const portraitInputRef = useRef(null);
+  const landscapeInputRef = useRef(null);
 
   const isEditing = !!technology;
 
@@ -26,8 +29,10 @@ export default function TechnologyModal({ isOpen, onClose, technology, onSuccess
           name: technology.name ?? "",
           description: technology.description ?? "",
           status: technology.status ?? "DRAFT",
-          imagePortrait: technology.images?.portrait ?? "",
-          imageLandscape: technology.images?.landscape ?? "",
+          images: {
+            portrait: technology.images?.portrait ?? "",
+            landscape: technology.images?.landscape ?? "",
+          },
           order: technology.order ?? 0,
         });
       } else {
@@ -41,6 +46,56 @@ export default function TechnologyModal({ isOpen, onClose, technology, onSuccess
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  const uploadImage = async (file, field) => {
+    if (!file) return;
+    const isPortrait = field === "portrait";
+    if (isPortrait) setUploadingPortrait(true);
+    else setUploadingLandscape(true);
+    setError("");
+    const formData = new FormData();
+    formData.append("image", file); // multer expects field name 'image'
+    formData.append("folder", "space-tourism/technology");
+    try {
+      const url = await toast.promise(
+        api.post("/upload", formData).then((res) => {
+          const data = res?.data;
+          const resolvedUrl = typeof data?.url === "string" ? data.url : data?.secure_url ?? data?.data?.url ?? "";
+          if (!resolvedUrl) throw new Error("No URL in response");
+          return resolvedUrl;
+        }),
+        {
+          loading: "Uploading image...",
+          success: "Image uploaded.",
+          error: (err) => err?.response?.data?.message || err?.message || "Upload failed",
+        }
+      );
+      setForm((prev) => ({
+        ...prev,
+        images: { ...prev.images, [field]: url },
+      }));
+    } catch (err) {
+      setError(err?.response?.data?.message || err?.message || "Image upload failed");
+    } finally {
+      if (isPortrait) {
+        setUploadingPortrait(false);
+        if (portraitInputRef.current) portraitInputRef.current.value = "";
+      } else {
+        setUploadingLandscape(false);
+        if (landscapeInputRef.current) landscapeInputRef.current.value = "";
+      }
+    }
+  };
+
+  const handlePortraitUpload = (e) => {
+    const file = e?.target?.files?.[0];
+    if (file) uploadImage(file, "portrait");
+  };
+
+  const handleLandscapeUpload = (e) => {
+    const file = e?.target?.files?.[0];
+    if (file) uploadImage(file, "landscape");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -52,8 +107,8 @@ export default function TechnologyModal({ isOpen, onClose, technology, onSuccess
         status: form.status,
         order: parseInt(form.order, 10) || 0,
         images: {
-          portrait: form.imagePortrait.trim() || undefined,
-          landscape: form.imageLandscape.trim() || undefined,
+          portrait: form.images.portrait.trim() || undefined,
+          landscape: form.images.landscape.trim() || undefined,
         },
       };
 
@@ -163,33 +218,49 @@ export default function TechnologyModal({ isOpen, onClose, technology, onSuccess
           </div>
           <div>
             <label htmlFor="tech-image-portrait" className="block font-sans-cond text-space-accent text-sm uppercase tracking-nav mb-1">
-              Image Portrait path
+              Image Portrait
             </label>
-            <input
-              id="tech-image-portrait"
-              name="imagePortrait"
-              type="text"
-              value={form.imagePortrait}
-              onChange={handleChange}
-              disabled={submitting}
-              className="w-full rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 text-white placeholder-white/30 font-sans text-sm focus:border-space-accent focus:outline-none focus:ring-1 focus:ring-space-accent disabled:opacity-60"
-              placeholder="./assets/technology/image-launch-vehicle-portrait.jpg"
-            />
+            <div className="flex items-start gap-3 flex-wrap">
+              <input
+                ref={portraitInputRef}
+                id="tech-image-portrait"
+                type="file"
+                accept="image/*"
+                disabled={submitting || uploadingPortrait}
+                onChange={handlePortraitUpload}
+                className="w-full text-white/80 file:mr-3 file:bg-white/10 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:text-sm file:font-sans-cond file:uppercase file:tracking-nav hover:file:bg-white/20 disabled:opacity-60"
+              />
+              {form.images?.portrait && (
+                <img
+                  src={form.images.portrait}
+                  alt="Portrait preview"
+                  className="h-14 w-14 rounded-lg object-cover border border-white/20 flex-shrink-0"
+                />
+              )}
+            </div>
           </div>
           <div>
             <label htmlFor="tech-image-landscape" className="block font-sans-cond text-space-accent text-sm uppercase tracking-nav mb-1">
-              Image Landscape path
+              Image Landscape
             </label>
-            <input
-              id="tech-image-landscape"
-              name="imageLandscape"
-              type="text"
-              value={form.imageLandscape}
-              onChange={handleChange}
-              disabled={submitting}
-              className="w-full rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 text-white placeholder-white/30 font-sans text-sm focus:border-space-accent focus:outline-none focus:ring-1 focus:ring-space-accent disabled:opacity-60"
-              placeholder="./assets/technology/image-launch-vehicle-landscape.jpg"
-            />
+            <div className="flex items-start gap-3 flex-wrap">
+              <input
+                ref={landscapeInputRef}
+                id="tech-image-landscape"
+                type="file"
+                accept="image/*"
+                disabled={submitting || uploadingLandscape}
+                onChange={handleLandscapeUpload}
+                className="w-full text-white/80 file:mr-3 file:bg-white/10 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:text-sm file:font-sans-cond file:uppercase file:tracking-nav hover:file:bg-white/20 disabled:opacity-60"
+              />
+              {form.images?.landscape && (
+                <img
+                  src={form.images.landscape}
+                  alt="Landscape preview"
+                  className="h-14 w-14 rounded-lg object-cover border border-white/20 flex-shrink-0"
+                />
+              )}
+            </div>
           </div>
           </div>
           {error && (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { api } from "../../utils/api";
 import toast from "react-hot-toast";
 
@@ -7,15 +7,23 @@ const emptyForm = {
   role: "",
   bio: "",
   status: "DRAFT",
-  imagePng: "",
-  imageWebp: "",
+  images: { png: "", webp: "" },
   order: 0,
 };
+
+function cloudinaryUrlToDualFormat(url) {
+  if (!url || typeof url !== "string") return { pngUrl: "", webpUrl: "" };
+  const pngUrl = url.replace(/\.[^.?#]+($|\?)/, ".png$1");
+  const webpUrl = url.replace(/\.[^.?#]+($|\?)/, ".webp$1");
+  return { pngUrl, webpUrl };
+}
 
 export default function CrewModal({ isOpen, onClose, crew, onSuccess }) {
   const [form, setForm] = useState(emptyForm);
   const [submitting, setSubmitting] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const fileInputRef = useRef(null);
 
   const isEditing = !!crew;
 
@@ -28,8 +36,10 @@ export default function CrewModal({ isOpen, onClose, crew, onSuccess }) {
           role: crew.role ?? "",
           bio: crew.bio ?? "",
           status: crew.status ?? "DRAFT",
-          imagePng: crew.images?.png ?? "",
-          imageWebp: crew.images?.webp ?? "",
+          images: {
+            png: crew.images?.png ?? "",
+            webp: crew.images?.webp ?? "",
+          },
           order: crew.order ?? 0,
         });
       } else {
@@ -40,7 +50,46 @@ export default function CrewModal({ isOpen, onClose, crew, onSuccess }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "order") {
+      setForm((prev) => ({ ...prev, [name]: value }));
+      return;
+    }
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e?.target?.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setError("");
+    const formData = new FormData();
+    formData.append("image", file); // multer expects field name 'image'
+    formData.append("folder", "space-tourism/crew");
+    try {
+      const url = await toast.promise(
+        api.post("/upload", formData).then((res) => {
+          const data = res?.data;
+          const resolvedUrl = typeof data?.url === "string" ? data.url : data?.secure_url ?? data?.data?.url ?? "";
+          if (!resolvedUrl) throw new Error("No URL in response");
+          return resolvedUrl;
+        }),
+        {
+          loading: "Uploading image...",
+          success: "Image uploaded.",
+          error: (err) => err?.response?.data?.message || err?.message || "Upload failed",
+        }
+      );
+      const { pngUrl, webpUrl } = cloudinaryUrlToDualFormat(url);
+      setForm((prev) => ({
+        ...prev,
+        images: { png: pngUrl, webp: webpUrl },
+      }));
+    } catch (err) {
+      setError(err?.response?.data?.message || err?.message || "Image upload failed");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -55,8 +104,8 @@ export default function CrewModal({ isOpen, onClose, crew, onSuccess }) {
         status: form.status,
         order: parseInt(form.order, 10) || 0,
         images: {
-          png: form.imagePng.trim() || undefined,
-          webp: form.imageWebp.trim() || undefined,
+          png: form.images.png.trim() || undefined,
+          webp: form.images.webp.trim() || undefined,
         },
       };
 
@@ -180,34 +229,27 @@ export default function CrewModal({ isOpen, onClose, crew, onSuccess }) {
             </select>
           </div>
           <div>
-            <label htmlFor="crew-image-png" className="block font-sans-cond text-space-accent text-sm uppercase tracking-nav mb-1">
-              Image PNG path
+            <label htmlFor="crew-image" className="block font-sans-cond text-space-accent text-sm uppercase tracking-nav mb-1">
+              Image
             </label>
-            <input
-              id="crew-image-png"
-              name="imagePng"
-              type="text"
-              value={form.imagePng}
-              onChange={handleChange}
-              disabled={submitting}
-              className="w-full rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 text-white placeholder-white/30 font-sans text-sm focus:border-space-accent focus:outline-none focus:ring-1 focus:ring-space-accent disabled:opacity-60"
-              placeholder="./assets/crew/image-douglas-hurley.png"
-            />
-          </div>
-          <div>
-            <label htmlFor="crew-image-webp" className="block font-sans-cond text-space-accent text-sm uppercase tracking-nav mb-1">
-              Image WebP path
-            </label>
-            <input
-              id="crew-image-webp"
-              name="imageWebp"
-              type="text"
-              value={form.imageWebp}
-              onChange={handleChange}
-              disabled={submitting}
-              className="w-full rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 text-white placeholder-white/30 font-sans text-sm focus:border-space-accent focus:outline-none focus:ring-1 focus:ring-space-accent disabled:opacity-60"
-              placeholder="./assets/crew/image-douglas-hurley.webp"
-            />
+            <div className="flex items-start gap-3 flex-wrap">
+              <input
+                ref={fileInputRef}
+                id="crew-image"
+                type="file"
+                accept="image/*"
+                disabled={submitting || uploading}
+                onChange={handleImageUpload}
+                className="w-full text-white/80 file:mr-3 file:bg-white/10 file:text-white file:border-0 file:rounded-md file:px-4 file:py-2 file:text-sm file:font-sans-cond file:uppercase file:tracking-nav hover:file:bg-white/20 disabled:opacity-60"
+              />
+              {form.images?.png && (
+                <img
+                  src={form.images.png}
+                  alt="Crew preview"
+                  className="h-14 w-14 rounded-lg object-cover border border-white/20 flex-shrink-0"
+                />
+              )}
+            </div>
           </div>
           </div>
           {error && (
