@@ -57,11 +57,17 @@ export default {
         "spin-slow": "spin 120s linear infinite",
         /* Explore button focus pulse */
         pulsate: "pulsate 1s ease-in-out infinite",
+        /* Subtle breathing background for space pages */
+        "bg-breathe": "bg-breathe 30s ease-in-out infinite",
       },
       keyframes: {
         pulsate: {
           "0%, 100%": { boxShadow: "none" },
           "50%": { boxShadow: "0 0 0 3.125rem rgba(255,255,255,0.1)" },
+        },
+        "bg-breathe": {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.05)" },
         },
       },
     },

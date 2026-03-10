@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 
 const Home = () => {
@@ -36,19 +37,12 @@ const Home = () => {
 
           {/* Right: Explore CTA button */}
           <div className="flex items-end justify-center md:justify-end">
-            {/*
-              Circle button — diameter uses clamp so it scales between 150px
-              (mobile) and 274px (wide desktop). Custom `explore-btn` class
-              provides the outer-glow box-shadow on hover/focus (defined in
-              index.css @layer utilities — can't be expressed with Tailwind's
-              shadow scale).
-            */}
-            <button
-              type="button"
-              className="explore-btn cursor-pointer flex items-center justify-center aspect-square rounded-full bg-white text-space-dark font-serif uppercase tracking-[0.078125rem] sm:tracking-[0.125rem] text-[1.25rem] sm:text-[clamp(1.25rem,2vw,2rem)] w-[9.375rem] sm:w-[clamp(9.375rem,20vw,17.125rem)] border-none transition-shadow duration-300"
+            <Link
+              to="/destination"
+              className="explore-btn cursor-pointer flex items-center justify-center aspect-square rounded-full bg-white text-space-dark font-serif uppercase tracking-[0.078125rem] sm:tracking-[0.125rem] text-[1.25rem] sm:text-[clamp(1.25rem,2vw,2rem)] w-[9.375rem] sm:w-[clamp(9.375rem,20vw,17.125rem)] border-none transition-shadow duration-300 no-underline hover:opacity-90 focus:outline-none focus:opacity-90"
             >
               Explore
-            </button>
+            </Link>
           </div>
         </div>
       </div>

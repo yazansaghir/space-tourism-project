@@ -29,11 +29,14 @@ const MainLayout = () => {
   const bgClass = PAGE_BG[location.pathname] ?? "";
 
   return (
-    <div
-      className={`relative min-h-screen flex flex-col bg-cover bg-center bg-fixed ${bgClass}`}
-    >
+    <div className="relative min-h-screen flex flex-col overflow-hidden">
+      {/* Breathing background layer — scale animation only on bg */}
+      <div
+        className={`absolute inset-0 bg-cover bg-center bg-fixed ${bgClass} animate-bg-breathe origin-center`}
+        aria-hidden="true"
+      />
       {/* Content column: navbar + animated page outlet */}
-      <div className="relative flex-1 flex flex-col">
+      <div className="relative flex-1 flex flex-col z-10">
         <Navbar onMenuToggle={() => setIsSidebarOpen(true)} />
         <main className="flex-1 relative z-0 flex flex-col">
           <AnimatePresence mode="wait">

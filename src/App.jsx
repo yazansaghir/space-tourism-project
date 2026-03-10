@@ -1,7 +1,5 @@
-import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { AnimatePresence } from "framer-motion";
 import { AuthProvider } from "./context/AuthContext";
 import MainLayout from "./layouts/MainLayout";
 import DashboardLayout from "./layouts/DashboardLayout";
@@ -20,23 +18,8 @@ import Profile from "./pages/dashboard/Profile";
 import ProtectedRoute from "./components/dashboard/ProtectedRoute";
 import AdminOnlyRoute from "./components/dashboard/AdminOnlyRoute";
 import PermissionRoute from "./components/dashboard/PermissionRoute";
-import Preloader from "./components/ui/Preloader";
-
-const PRELOAD_DURATION_MS = 1800;
 
 function App() {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Bypass preloader entirely on dashboard routes
-    if (window.location.pathname.startsWith("/dashboard")) {
-      setLoading(false);
-      return;
-    }
-    const t = setTimeout(() => setLoading(false), PRELOAD_DURATION_MS);
-    return () => clearTimeout(t);
-  }, []);
-
   return (
     <>
       <Router>
@@ -91,9 +74,6 @@ function App() {
           </Routes>
         </AuthProvider>
       </Router>
-      <AnimatePresence>
-        {loading && <Preloader key="preloader" />}
-      </AnimatePresence>
     </>
   );
 }
